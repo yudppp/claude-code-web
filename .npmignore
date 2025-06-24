@@ -1,0 +1,45 @@
+# Source files (we only ship built files)
+client/
+server/
+shared/
+
+# Development files
+.github/
+.biome/
+.env
+.env.example
+*.log
+CLAUDE.md
+CLAUDE.local.md
+RELEASING.md
+
+# Config files
+biome.json
+nodemon.json
+tsconfig.json
+vite.config.js
+
+# Git
+.git/
+.gitignore
+
+# Build artifacts that shouldn't be published
+*.tgz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Keep these
+!dist/
+!dist-server/
+!bin/
+!README.md
+!LICENSE
+!package.json

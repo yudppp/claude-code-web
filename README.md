@@ -1,5 +1,8 @@
 # Claude Code Web
 
+[![npm version](https://badge.fury.io/js/%40yudppp%2Fclaude-code-web.svg)](https://www.npmjs.com/package/@yudppp/claude-code-web)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A web interface for Claude Code CLI that allows you to monitor and control Claude sessions from your browser. Built with Express, React, and Socket.io for real-time communication.
 
 ## Features

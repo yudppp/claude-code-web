@@ -23,7 +23,11 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "check": "biome check . && npm run typecheck"
+    "check": "biome check . && npm run typecheck",
+    "prepublishOnly": "npm run check && npm run build",
+    "release:patch": "npm version patch && git push origin main --tags",
+    "release:minor": "npm version minor && git push origin main --tags",
+    "release:major": "npm version major && git push origin main --tags"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^1.0.33",
