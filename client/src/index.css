@@ -1,0 +1,21 @@
+/* Load Primer CSS first */
+@import '@primer/css/index.scss';
+
+/* Remove conflicting global styles */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Prevent horizontal scroll on mobile */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ensure proper box sizing */
+* {
+  box-sizing: border-box;
+}
+
+/* Let Primer handle all theme-related styling */

@@ -1,0 +1,80 @@
+{
+  "name": "@yudppp/claude-code-web",
+  "version": "1.0.0",
+  "description": "Web interface for Claude Code CLI - Monitor and control Claude sessions from your browser",
+  "license": "MIT",
+  "author": "yudppp",
+  "type": "commonjs",
+  "main": "index.js",
+  "bin": {
+    "claude-code-web": "./bin/claude-code-web.js"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "dev:unified": "npm run build && npm run server:dev",
+    "server:dev": "nodemon --exec ts-node server/index.ts",
+    "client:dev": "vite",
+    "build": "vite build && npm run build:server",
+    "build:server": "tsc -p server/tsconfig.json",
+    "build:watch": "vite build --watch",
+    "start": "NODE_ENV=production node dist-server/index.js",
+    "preview": "npm run build && npm run start",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "check": "biome check . && npm run typecheck"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.33",
+    "@primer/css": "^22.0.0",
+    "@primer/react": "^37.27.0",
+    "@types/react": "^19.1.8",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.6.0",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.6.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.5",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.23",
+    "@types/node": "^24.0.3",
+    "concurrently": "^9.2.0",
+    "nodemon": "^3.1.10",
+    "sass": "^1.89.2",
+    "ts-node": "^10.9.2"
+  },
+  "files": [
+    "dist",
+    "dist-server",
+    "bin",
+    "README.md"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "web-interface",
+    "monitoring",
+    "ai",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yudppp/claude-code-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yudppp/claude-code-web/issues"
+  },
+  "homepage": "https://github.com/yudppp/claude-code-web#readme"
+}

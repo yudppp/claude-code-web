@@ -1,0 +1,8 @@
+node_modules/
+CLAUDE.local.md
+dist/
+dist-server/
+.env
+*.log
+.claude/
+.biome/
