@@ -1,6 +1,6 @@
 {
   "name": "@yudppp/claude-code-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Web interface for Claude Code CLI - Monitor and control Claude sessions from your browser",
   "license": "MIT",
   "author": "yudppp",
