@@ -1,5 +1,5 @@
 {
-  "name": "@yudppp/claude-code-web",
+  "name": "@yudppp2/claude-code-web",
   "version": "1.0.1",
   "description": "Web interface for Claude Code CLI - Monitor and control Claude sessions from your browser",
   "license": "MIT",
@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "index.js",
   "bin": {
-    "claude-code-web": "./bin/claude-code-web.js"
+    "claude-code-web": "bin/claude-code-web.js"
   },
   "scripts": {
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
@@ -75,10 +75,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yudppp/claude-code-web.git"
+    "url": "git+https://github.com/yudppp/claude-code-web.git"
   },
   "bugs": {
     "url": "https://github.com/yudppp/claude-code-web/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "homepage": "https://github.com/yudppp/claude-code-web#readme"
 }

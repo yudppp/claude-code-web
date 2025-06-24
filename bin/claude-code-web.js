@@ -37,7 +37,7 @@ Claude Code Web - Web interface for Claude Code CLI
 
 Usage: 
   claude-code-web [options]
-  npx @yudppp/claude-code-web [options]
+  npx @yudppp2/claude-code-web [options]
 
 Options:
   --port, -p <port>  Port to run the server on (default: 9608)

@@ -5,7 +5,7 @@ This document describes the process for releasing new versions of claude-code-we
 ## Prerequisites
 
 1. You must have write access to the repository
-2. You must have an npm account with publish access to `@yudppp/claude-code-web`
+2. You must have an npm account with publish access to `@yudppp2/claude-code-web`
 3. Set up the `NPM_TOKEN` secret in GitHub repository settings
 
 ## Automatic Release Process (Recommended)
@@ -66,8 +66,8 @@ git push origin v1.0.1-alpha.0
 ```
 
 Pre-releases will be published with appropriate npm tags:
-- Beta: `npm install @yudppp/claude-code-web@beta`
-- Alpha: `npm install @yudppp/claude-code-web@alpha`
+- Beta: `npm install @yudppp2/claude-code-web@beta`
+- Alpha: `npm install @yudppp2/claude-code-web@alpha`
 
 ## Workflow Dispatch
 
@@ -82,8 +82,8 @@ You can also manually trigger a publish through GitHub Actions:
 
 After release:
 
-1. Check npm: https://www.npmjs.com/package/@yudppp/claude-code-web
-2. Test installation: `npx @yudppp/claude-code-web --help`
+1. Check npm: https://www.npmjs.com/package/@yudppp2/claude-code-web
+2. Test installation: `npx @yudppp2/claude-code-web --help`
 3. Verify GitHub release page
 
 ## Rollback
@@ -92,8 +92,8 @@ If something goes wrong:
 
 ```bash
 # Unpublish a specific version (within 72 hours)
-npm unpublish @yudppp/claude-code-web@1.0.1
+npm unpublish @yudppp2/claude-code-web@1.0.1
 
 # Deprecate a version (recommended over unpublish)
-npm deprecate @yudppp/claude-code-web@1.0.1 "Critical bug, please use 1.0.2"
+npm deprecate @yudppp2/claude-code-web@1.0.1 "Critical bug, please use 1.0.2"
 ```

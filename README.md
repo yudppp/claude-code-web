@@ -1,6 +1,6 @@
 # Claude Code Web
 
-[![npm version](https://badge.fury.io/js/%40yudppp%2Fclaude-code-web.svg)](https://www.npmjs.com/package/@yudppp/claude-code-web)
+[![npm version](https://badge.fury.io/js/%40yudppp%2Fclaude-code-web.svg)](https://www.npmjs.com/package/@yudppp2/claude-code-web)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A web interface for Claude Code CLI that allows you to monitor and control Claude sessions from your browser. Built with Express, React, and Socket.io for real-time communication.
@@ -26,14 +26,14 @@ A web interface for Claude Code CLI that allows you to monitor and control Claud
 Run directly with npx (no installation required):
 
 ```bash
-npx @yudppp/claude-code-web
+npx @yudppp2/claude-code-web
 ```
 
 Or specify a custom port:
 
 ```bash
-npx @yudppp/claude-code-web --port 3000
-npx @yudppp/claude-code-web -p 3000
+npx @yudppp2/claude-code-web --port 3000
+npx @yudppp2/claude-code-web -p 3000
 ```
 
 ## Installation
@@ -41,7 +41,7 @@ npx @yudppp/claude-code-web -p 3000
 ### Global Installation
 
 ```bash
-npm install -g @yudppp/claude-code-web
+npm install -g @yudppp2/claude-code-web
 ```
 
 Then run:
@@ -68,9 +68,9 @@ After installation, you can run the server in several ways:
 
 1. **Using npx** (recommended for quick start):
 ```bash
-npx @yudppp/claude-code-web
-npx @yudppp/claude-code-web --port 3000
-npx @yudppp/claude-code-web -p 3000
+npx @yudppp2/claude-code-web
+npx @yudppp2/claude-code-web --port 3000
+npx @yudppp2/claude-code-web -p 3000
 ```
 
 2. **Global command** (if installed globally):
@@ -96,15 +96,15 @@ npm start
 
 ```bash
 # Show help
-npx @yudppp/claude-code-web --help
+npx @yudppp2/claude-code-web --help
 
 # Specify port (multiple formats supported)
-npx @yudppp/claude-code-web --port 3000
-npx @yudppp/claude-code-web -p 3000
-npx @yudppp/claude-code-web --port=3000
+npx @yudppp2/claude-code-web --port 3000
+npx @yudppp2/claude-code-web -p 3000
+npx @yudppp2/claude-code-web --port=3000
 
 # Environment variable
-PORT=3000 npx @yudppp/claude-code-web
+PORT=3000 npx @yudppp2/claude-code-web
 
 # Default port is 9608
 ```
