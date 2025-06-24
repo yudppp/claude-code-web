@@ -14,16 +14,6 @@ export function ThinkingDisplay({ messages }: ThinkingDisplayProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const prevMessagesLength = useRef(0)
 
-  useEffect(() => {
-    if (!isCollapsed) {
-      scrollToBottom()
-    }
-  }, [messages, isCollapsed])
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   // Reset when messages are cleared (new task started)
   useEffect(() => {
     if (messages.length === 0 && prevMessagesLength.current > 0) {

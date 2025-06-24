@@ -73,7 +73,7 @@ class NotificationService {
           tag: 'claude-code-notification',
           requireInteraction: false,
           ...options,
-        } as any) // vibrate is supported but not in TypeScript types
+        } as NotificationOptions)
         console.log('[NotificationService] Notification shown via Service Worker')
       } else if ('Notification' in window) {
         console.log('[NotificationService] Using Notification API directly')
@@ -194,7 +194,7 @@ class NotificationService {
 
       // Mark displayed notifications as read
       if (notifications.length > 0) {
-        const notificationIds = notifications.map((n: any) => n.id)
+        const notificationIds = notifications.map((n: { id: string }) => n.id)
         await fetch(`/api/notifications/mark-read/${this.clientId}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

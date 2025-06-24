@@ -1,10 +1,10 @@
 import { CheckIcon, ShieldCheckIcon, ToolsIcon, XIcon } from '@primer/octicons-react'
 import { Box, Button, Checkbox, Dialog, FormControl, Heading, Text } from '@primer/react'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 
 interface Tool {
   name: string
-  parameters: Record<string, any>
+  parameters: Record<string, unknown>
 }
 
 interface ToolApprovalModalProps {
@@ -16,6 +16,7 @@ interface ToolApprovalModalProps {
 
 export function ToolApprovalModal({ isOpen, tools, onApprove, onReject }: ToolApprovalModalProps) {
   const [dontAskAgain, setDontAskAgain] = useState(false)
+  const dialogTitleId = useId()
 
   const handleApprove = () => {
     onApprove(tools, dontAskAgain)
@@ -30,8 +31,8 @@ export function ToolApprovalModal({ isOpen, tools, onApprove, onReject }: ToolAp
   if (!isOpen) return null
 
   return (
-    <Dialog onClose={handleReject} aria-labelledby="tool-approval-title">
-      <Dialog.Header id="tool-approval-title">
+    <Dialog onClose={handleReject} aria-labelledby={dialogTitleId}>
+      <Dialog.Header id={dialogTitleId}>
         <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <ShieldCheckIcon size={20} />
           <Heading as="h2" style={{ fontSize: '16px', margin: 0, wordBreak: 'break-word' }}>
@@ -58,7 +59,7 @@ export function ToolApprovalModal({ isOpen, tools, onApprove, onReject }: ToolAp
         >
           {tools.map((tool, index) => (
             <Box
-              key={index}
+              key={`${tool.name}-${index}`}
               style={{
                 padding: '12px',
                 borderBottom:
@@ -162,7 +163,7 @@ function getToolCategoryColor(toolName: string): string {
   }
 }
 
-function formatParameters(params: Record<string, any>): string {
+function formatParameters(params: Record<string, unknown>): string {
   // Special formatting for common parameters
   if (params.command) {
     return `$ ${params.command}`

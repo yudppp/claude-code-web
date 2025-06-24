@@ -1,6 +1,8 @@
 // Common type definitions
 export * from './socket'
 
+import type { ToolCall } from './socket'
+
 // Session related types
 export interface Session {
   id: string
@@ -20,7 +22,7 @@ export interface ConversationMessage {
   timestamp: string
   role: 'user' | 'assistant' | 'system'
   content: string
-  toolCalls?: any[]
+  toolCalls?: ToolCall[]
 }
 
 export interface ConversationHistory {
@@ -35,7 +37,7 @@ export interface ConversationHistory {
 export interface Message {
   id: string
   type: 'user' | 'assistant' | 'system' | 'result'
-  content?: string | any
+  content?: string | Record<string, unknown>
   timestamp: string
   usage?: {
     inputTokens?: number

@@ -1,5 +1,5 @@
+import path from 'node:path'
 import { query } from '@anthropic-ai/claude-code'
-import path from 'path'
 import type { Server, Socket } from 'socket.io'
 import type {
   ClientToServerEvents,
@@ -8,6 +8,10 @@ import type {
   SystemMessageEvent,
   ToolCall,
 } from '../shared/types/socket'
+
+// Type for Claude Code SDK query options
+type QueryOptions = Parameters<typeof query>[0]
+
 import { notificationQueue } from './services/notificationQueue'
 import { sessionService } from './services/sessionService'
 
@@ -60,17 +64,13 @@ export function setupClaudeHandlers(io: TypedServer): void {
         })
 
         // Query Claude Code SDK
-        const queryOptions: any = {
+        const queryOptions: QueryOptions = {
           prompt,
           abortController,
           options: {
             ...options,
+            ...(sessionId ? { resume: sessionId } : {}),
           },
-        }
-
-        // Add resume option if sessionId is provided
-        if (sessionId) {
-          queryOptions.options.resume = sessionId
         }
 
         const generator = query(queryOptions)
@@ -136,7 +136,7 @@ export function setupClaudeHandlers(io: TypedServer): void {
 
               if (
                 toolCalls.length > 0 &&
-                queryOptions.options.permissionMode !== 'bypassPermissions'
+                queryOptions.options?.permissionMode !== 'bypassPermissions'
               ) {
                 // Send tool approval request
                 console.log('[DEBUG] Sending tool:approval event')
@@ -261,12 +261,14 @@ export function setupClaudeHandlers(io: TypedServer): void {
             }
 
             case 'result': {
-              const resultMessage = message as any // Type assertion for now
+              const resultMessage = message
               socket.emit('message:result', {
                 usage: resultMessage.usage
                   ? {
-                      inputTokens: resultMessage.usage.input_tokens,
-                      outputTokens: resultMessage.usage.output_tokens,
+                      inputTokens:
+                        resultMessage.usage.input_tokens ?? resultMessage.usage.inputTokens ?? 0,
+                      outputTokens:
+                        resultMessage.usage.output_tokens ?? resultMessage.usage.outputTokens ?? 0,
                     }
                   : undefined,
                 totalCost: resultMessage.total_cost_usd,
@@ -400,7 +402,7 @@ export function setupClaudeHandlers(io: TypedServer): void {
           const refreshedSessions = await sessionService.getAllSessions()
           const refreshedSession = refreshedSessions.find((s) => s.id === sessionId)
 
-          if (refreshedSession && refreshedSession.isActive) {
+          if (refreshedSession?.isActive) {
             console.log('[DEBUG] Session became active after refresh:', sessionId)
             session.isActive = true
           } else {
@@ -420,7 +422,7 @@ export function setupClaudeHandlers(io: TypedServer): void {
 
         console.log('[DEBUG] Preparing to query Claude Code SDK with options:', {
           sessionId,
-          comment: comment.substring(0, 100) + '...',
+          comment: `${comment.substring(0, 100)}...`,
           projectPath: session.projectPath,
         })
 
@@ -428,7 +430,7 @@ export function setupClaudeHandlers(io: TypedServer): void {
         const abortController = new AbortController()
         socket.data.currentAbort = abortController
 
-        const queryOptions: any = {
+        const queryOptions: QueryOptions = {
           prompt: comment,
           abortController,
           options: {
@@ -445,7 +447,6 @@ export function setupClaudeHandlers(io: TypedServer): void {
         console.log('[DEBUG] Query options:', JSON.stringify(queryOptions, null, 2))
 
         let messageReceived = false
-        let errorOccurred = false
 
         try {
           console.log(
@@ -517,7 +518,7 @@ export function setupClaudeHandlers(io: TypedServer): void {
 
                 if (
                   commentToolCalls.length > 0 &&
-                  queryOptions.options.permissionMode !== 'bypassPermissions'
+                  queryOptions.options?.permissionMode !== 'bypassPermissions'
                 ) {
                   console.log('[DEBUG] Sending tool:approval event for comment')
                   socket.emit('tool:approval', {
@@ -611,12 +612,16 @@ export function setupClaudeHandlers(io: TypedServer): void {
               }
 
               case 'result': {
-                const resultMessage = message as any
+                const resultMessage = message
                 socket.emit('message:result', {
                   usage: resultMessage.usage
                     ? {
-                        inputTokens: resultMessage.usage.input_tokens,
-                        outputTokens: resultMessage.usage.output_tokens,
+                        inputTokens:
+                          resultMessage.usage.input_tokens ?? resultMessage.usage.inputTokens ?? 0,
+                        outputTokens:
+                          resultMessage.usage.output_tokens ??
+                          resultMessage.usage.outputTokens ??
+                          0,
                       }
                     : undefined,
                   totalCost: resultMessage.total_cost_usd,
@@ -646,7 +651,6 @@ export function setupClaudeHandlers(io: TypedServer): void {
             })
           }
         } catch (streamError) {
-          errorOccurred = true
           console.error('[DEBUG] Stream error:', streamError)
           console.error(
             '[DEBUG] Stream error stack:',
@@ -722,11 +726,11 @@ function parseToolCalls(content: string): ToolCall[] {
   console.log('[DEBUG] Parsing tool calls from content')
 
   for (const regex of regexes) {
-    let match
-    while ((match = regex.exec(content)) !== null) {
+    let match: RegExpExecArray | null = regex.exec(content)
+    while (match !== null) {
       const name = match[1]
       const paramsXml = match[2]
-      const parameters: any = {}
+      const parameters: Record<string, unknown> = {}
 
       console.log('[DEBUG] Found tool call:', name)
 
@@ -737,13 +741,15 @@ function parseToolCalls(content: string): ToolCall[] {
       ]
 
       for (const paramRegex of paramRegexes) {
-        let paramMatch
-        while ((paramMatch = paramRegex.exec(paramsXml)) !== null) {
+        let paramMatch: RegExpExecArray | null = paramRegex.exec(paramsXml)
+        while (paramMatch !== null) {
           parameters[paramMatch[1]] = paramMatch[2].trim()
+          paramMatch = paramRegex.exec(paramsXml)
         }
       }
 
       toolCalls.push({ name, parameters })
+      match = regex.exec(content)
     }
   }
 

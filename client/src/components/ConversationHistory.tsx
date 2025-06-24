@@ -8,14 +8,14 @@ import {
 import { Box, Button, Heading, Label, Spinner, Text, Timeline } from '@primer/react'
 import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import type { ConversationHistory, ConversationMessage } from '../types'
+import type { ConversationHistory as ConversationHistoryType, ConversationMessage } from '../types'
 
 interface ConversationHistoryProps {
   sessionId: string | null
 }
 
 export function ConversationHistory({ sessionId }: ConversationHistoryProps) {
-  const [history, setHistory] = useState<ConversationHistory | null>(null)
+  const [history, setHistory] = useState<ConversationHistoryType | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
@@ -200,13 +200,22 @@ export function ConversationHistory({ sessionId }: ConversationHistoryProps) {
           }}
         >
           <Timeline>
-            {displayMessages.map((message, index) => (
-              <Timeline.Item key={index} condensed>
+            {displayMessages.map((message) => (
+              <Timeline.Item key={`${message.timestamp}-${message.role}`} condensed>
                 <Timeline.Badge>{getMessageIcon(message.role)}</Timeline.Badge>
                 <Timeline.Body>
                   <Box sx={{ mb: 3 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                      <Label variant={getMessageVariant(message.role) as any} size="small">
+                      <Label
+                        variant={
+                          getMessageVariant(message.role) as
+                            | 'primary'
+                            | 'success'
+                            | 'attention'
+                            | 'secondary'
+                        }
+                        size="small"
+                      >
                         {getMessageLabel(message.role)}
                       </Label>
                       <Text sx={{ fontSize: 0, color: 'fg.muted' }}>

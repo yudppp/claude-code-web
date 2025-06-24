@@ -8,9 +8,11 @@ import type {
   ExecutionEvent,
   Message,
   MessageEvent,
+  NotificationEvent,
   ResultMessageEvent,
   ServerToClientEvents,
   SessionData,
+  SystemMessageEvent,
   ToolApprovalEvent,
 } from '../types'
 
@@ -27,7 +29,7 @@ interface UseClaudeSocketOptions {
   onCommentComplete?: (data: CommentEvent) => void
   onCommentError?: (data: CommentErrorEvent) => void
   onViewersUpdate?: (data: { sessionId: string; count: number }) => void
-  onNotification?: (notification: any) => void
+  onNotification?: (notification: NotificationEvent) => void
 }
 
 export function useClaudeSocket(socket: TypedSocket | null, options: UseClaudeSocketOptions) {
@@ -72,7 +74,7 @@ export function useClaudeSocket(socket: TypedSocket | null, options: UseClaudeSo
       })
     }
 
-    const handleSystemMessage = (data: MessageEvent & { sessionInfo?: any }) => {
+    const handleSystemMessage = (data: SystemMessageEvent) => {
       onMessage?.({
         id: Date.now().toString(),
         type: 'system',
@@ -88,16 +90,16 @@ export function useClaudeSocket(socket: TypedSocket | null, options: UseClaudeSo
         type: 'result',
         timestamp: data.timestamp,
         usage: data.usage,
-        cost: data.totalCost,
+        cost: data.totalCost ? { totalCost: data.totalCost } : undefined,
       })
     }
 
     // Execution events
-    const handleExecutionStart = (data: ExecutionEvent) => {
+    const handleExecutionStart = (_data: ExecutionEvent) => {
       onExecutionStart?.()
     }
 
-    const handleExecutionComplete = (data: ExecutionEvent) => {
+    const handleExecutionComplete = (_data: ExecutionEvent) => {
       onExecutionComplete?.()
     }
 
@@ -132,7 +134,7 @@ export function useClaudeSocket(socket: TypedSocket | null, options: UseClaudeSo
     }
 
     // Notifications
-    const handleNotification = (data: any) => {
+    const handleNotification = (data: NotificationEvent) => {
       onNotification?.(data)
     }
 

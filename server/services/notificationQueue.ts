@@ -7,12 +7,15 @@ interface Notification {
   body: string
   timestamp: Date
   read: boolean
-  data?: any
+  data?: Record<string, unknown>
 }
 
 class NotificationQueue {
   private notifications: Map<string, Notification[]> = new Map() // clientId -> notifications
-  private pendingToolApprovals: Map<string, any> = new Map() // sessionId -> tool info
+  private pendingToolApprovals: Map<
+    string,
+    { tools: Array<{ name: string; parameters: Record<string, unknown> }> }
+  > = new Map() // sessionId -> tool info
 
   // Add notification
   addNotification(
@@ -58,11 +61,11 @@ class NotificationQueue {
   }
 
   // Add pending tool approval
-  addPendingToolApproval(sessionId: string, toolInfo: any): void {
-    this.pendingToolApprovals.set(sessionId, {
-      ...toolInfo,
-      timestamp: new Date(),
-    })
+  addPendingToolApproval(
+    sessionId: string,
+    toolInfo: { tools: Array<{ name: string; parameters: Record<string, unknown> }> }
+  ): void {
+    this.pendingToolApprovals.set(sessionId, toolInfo)
   }
 
   // Remove pending tool approval

@@ -1,8 +1,8 @@
-import { exec } from 'child_process'
-import * as fs from 'fs/promises'
-import * as os from 'os'
-import * as path from 'path'
-import { promisify } from 'util'
+import { exec } from 'node:child_process'
+import * as fs from 'node:fs/promises'
+import * as os from 'node:os'
+import * as path from 'node:path'
+import { promisify } from 'node:util'
 
 const execAsync = promisify(exec)
 
@@ -23,7 +23,7 @@ export interface ConversationMessage {
   timestamp: Date
   role: 'user' | 'assistant' | 'system'
   content: string
-  toolCalls?: any[]
+  toolCalls?: number[]
 }
 
 export interface ConversationHistory {
@@ -240,13 +240,13 @@ export class SessionService {
           // Count tool calls in assistant messages
           if (entry.message?.content) {
             // Handle both array and string content
-            const contentStr = Array.isArray(entry.message.content)
+            const _contentStr = Array.isArray(entry.message.content)
               ? JSON.stringify(entry.message.content)
               : entry.message.content
             // Look for tool_use type in content array
             if (Array.isArray(entry.message.content)) {
               const toolUseCount = entry.message.content.filter(
-                (c: any) => c.type === 'tool_use'
+                (c: { type: string }) => c.type === 'tool_use'
               ).length
               toolCalls += toolUseCount
             }
@@ -260,7 +260,7 @@ export class SessionService {
             currentBranch = branchMatch[1]
           }
         }
-      } catch (error) {}
+      } catch (_error) {}
     }
 
     // Generate name from project path
@@ -318,7 +318,7 @@ export class SessionService {
             `[SessionService] isSessionActive: PID ${pid} is Claude process: ${isClaudeProcess}`
           )
           return isClaudeProcess
-        } catch (error) {
+        } catch (_error) {
           console.debug(
             `[SessionService] isSessionActive: Process ${pid} not found or not accessible`
           )
@@ -357,7 +357,7 @@ export class SessionService {
               const pid = parseInt(match[1], 10)
               console.debug(`[SessionService] Found Claude process on Windows: PID ${pid}`)
               // We'll need to match the PID with the session later
-              activeSessions.set('active-' + pid, pid)
+              activeSessions.set(`active-${pid}`, pid)
             }
           }
         }
@@ -385,7 +385,7 @@ export class SessionService {
               const parts = line.split(/\s+/)
               if (parts.length > 1) {
                 const pid = parseInt(parts[1], 10)
-                if (!isNaN(pid)) {
+                if (!Number.isNaN(pid)) {
                   console.debug(
                     `[SessionService] Examining process PID ${pid}: ${line.substring(0, 100)}...`
                   )
@@ -440,7 +440,7 @@ export class SessionService {
                         )
                         if (priority > 5) {
                           // Only track high-priority processes without sessions
-                          activeSessions.set('active-' + pid, pid)
+                          activeSessions.set(`active-${pid}`, pid)
                         }
                       }
                     }
@@ -451,7 +451,7 @@ export class SessionService {
                     )
                     // If we can't get the cwd but it's a high-priority process, still track it
                     if (priority > 5) {
-                      activeSessions.set('active-' + pid, pid)
+                      activeSessions.set(`active-${pid}`, pid)
                     }
                   }
                 }
@@ -660,7 +660,7 @@ export class SessionService {
               let contentStr = content
               if (Array.isArray(content)) {
                 contentStr = content
-                  .map((c: any) => {
+                  .map((c: { type: string; text?: string; name?: string; input?: unknown }) => {
                     if (c.type === 'text') {
                       return c.text
                     } else if (c.type === 'tool_use') {
@@ -677,11 +677,13 @@ export class SessionService {
                 content: contentStr,
                 toolCalls:
                   entry.message.tool_calls ||
-                  (Array.isArray(content) ? content.filter((c: any) => c.type === 'tool_use') : []),
+                  (Array.isArray(content)
+                    ? content.filter((c: { type: string } | undefined) => c?.type === 'tool_use')
+                    : []),
               })
             }
           }
-        } catch (error) {}
+        } catch (_error) {}
       }
 
       return {

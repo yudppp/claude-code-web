@@ -23,17 +23,12 @@ import type { Message, Session } from '../types'
 
 interface PendingTool {
   name: string
-  parameters: Record<string, any>
+  parameters: Record<string, unknown>
 }
 
 export function SessionDetailPage() {
   const { sessionId } = useParams<{ sessionId: string }>()
   const navigate = useNavigate()
-
-  if (!sessionId) {
-    navigate('/')
-    return null
-  }
   const [socket, setSocket] = useState<Socket | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
@@ -194,6 +189,10 @@ export function SessionDetailPage() {
 
     setShowToolApproval(false)
     setPendingTools([])
+  }
+
+  if (!sessionId) {
+    return null
   }
 
   if (!session) {

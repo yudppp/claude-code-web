@@ -1,21 +1,12 @@
-import { CommentIcon, PlayIcon, PlusIcon, StopIcon } from '@primer/octicons-react'
-import {
-  BaseStyles,
-  Box,
-  Button,
-  Header,
-  Heading,
-  StateLabel,
-  Text,
-  ThemeProvider,
-} from '@primer/react'
+import { CommentIcon, StopIcon } from '@primer/octicons-react'
+import { BaseStyles, Box, Header, Heading, StateLabel, Text, ThemeProvider } from '@primer/react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { io, type Socket } from 'socket.io-client'
 import type { Session } from '../types'
 
 export function SessionListPage() {
-  const [socket, setSocket] = useState<Socket | null>(null)
+  const [_socket, setSocket] = useState<Socket | null>(null)
   const [sessions, setSessions] = useState<Session[]>([])
 
   useEffect(() => {

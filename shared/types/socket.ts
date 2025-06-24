@@ -1,4 +1,5 @@
 // Socket.io event type definitions
+import type { ExecuteOptions } from './index'
 
 // Client to Server events
 export interface ClientToServerEvents {
@@ -15,7 +16,7 @@ export interface ClientToServerEvents {
   'tool:approve': (data: { approved: boolean }) => void
 
   // Execution control
-  execute: (data: { prompt: string; sessionId?: string; options?: any }) => void
+  execute: (data: { prompt: string; sessionId?: string; options?: ExecuteOptions }) => void
   'execution:cancel': () => void
 
   // Typing state
@@ -111,7 +112,7 @@ export interface ToolApprovalEvent {
 
 export interface ToolCall {
   name: string
-  parameters: Record<string, any>
+  parameters: Record<string, unknown>
 }
 
 export interface ExecutionEvent {
@@ -144,7 +145,7 @@ export interface NotificationEvent {
   title: string
   body: string
   timestamp: string
-  data?: any
+  data?: Record<string, unknown>
 }
 
 // System message event (with sessionInfo)

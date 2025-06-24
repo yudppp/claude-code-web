@@ -1,8 +1,8 @@
+import fs from 'node:fs'
+import { createServer } from 'node:http'
+import path from 'node:path'
 import cors from 'cors'
 import express, { type Request, type Response } from 'express'
-import fs from 'fs'
-import { createServer } from 'http'
-import path from 'path'
 import { Server } from 'socket.io'
 import type { ClientToServerEvents, ServerToClientEvents, SocketData } from '../shared/types/socket'
 import { setupClaudeHandlers } from './claude-handler'
@@ -126,7 +126,7 @@ io.on('connection', (socket) => {
     notificationQueue.unregisterClient(socket.id)
 
     // Leave joined sessions
-    const socketData = (socket as any).data as SocketData
+    const socketData = socket.data as SocketData
     if (socketData?.joinedSessions) {
       socketData.joinedSessions.forEach((sessionId) => {
         socket.leave(`session:${sessionId}`)
